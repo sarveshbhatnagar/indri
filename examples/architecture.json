@@ -1,0 +1,21 @@
+{
+  "title": "How Indri connects developers and agents",
+  "description": "Agents draw and revise; developers review one drawing and leave feedback on objects or screenshot-style areas. Every edit saves a version. Earlier versions can be opened or restored without deleting history.",
+  "direction": "TB",
+  "nodes": [
+    { "id": "agent", "label": "Codex / Claude / agent", "description": "Reads code with its existing tools. Creates and revises drawings through Indri's MCP tools." },
+    { "id": "mcp", "label": "Indri MCP tools", "description": "Creates and revises drawings, retrieves feedback and selected/nearby objects from the comment's original revision, and replies or resolves threads. get_diagram can open an older revision; list_diagram_versions lists history. Endpoint: /mcp.", "source": { "path": "src/mcp.js" } },
+    { "id": "store", "label": "SQLite workspace", "description": "Persists drawings, graph snapshots and comment threads. Stable element IDs preserve object comments. Area comments retain coordinates and captured objects from their original revision. Stale writes are rejected.", "source": { "path": "src/store.js" } },
+    { "id": "browser", "label": "Focused diagram review", "description": "Shows only the agent's working drawing, its comments and history. Drag a screenshot-style rectangle or click an object/empty space to comment. Browser and server share layout coordinates. HTTP APIs load/save feedback; the version chooser opens earlier drawings.", "source": { "path": "web/app.js" } },
+    { "id": "developer", "label": "Developer", "description": "Reviews the drawing, selects areas to comment, browses versions, and asks the agent to continue from feedback. Comments do not automatically wake an idle agent." },
+    { "id": "history", "label": "Version history", "description": "Every diagram update records a graph snapshot. Open an earlier version with its original area pins. Restore as new version copies an old graph into a new current revision, keeping all intervening versions and discussion threads.", "source": { "path": "src/store.js", "line": 88 } }
+  ],
+  "edges": [
+    { "id": "draw", "source": "agent", "target": "mcp", "label": "draw / read feedback" },
+    { "id": "persist", "source": "mcp", "target": "store", "label": "save / retrieve" },
+    { "id": "review", "source": "store", "target": "browser", "label": "HTTP: drawing + comments" },
+    { "id": "comment", "source": "developer", "target": "browser", "label": "review + comment" },
+    { "id": "save-version", "source": "store", "target": "history", "label": "each edit → new version" },
+    { "id": "browse-history", "source": "history", "target": "browser", "label": "browse / restore" }
+  ]
+}

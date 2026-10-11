@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Indri · Diagram review</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="topbar"><span class="brand">indri<span> / shared understanding</span></span><span class="local"><i></i> <span id="view-label">Local workspace</span></span></header>
+  <main id="home" hidden>
+    <p class="eyebrow">DEVELOPER + AGENT</p>
+    <h1>Make it visible.<br>Work it out together.</h1>
+    <p class="intro">Architecture, flows, rough screens. Your agent draws; you leave feedback right where it belongs.</p>
+    <div class="section-heading"><h2>Your diagrams & sketches</h2><span id="list-count"></span></div>
+    <div id="diagram-list"></div>
+    <div class="connect"><span class="eyebrow">CONNECT YOUR AGENT</span><p>MCP endpoint <code id="mcp-endpoint"></code></p><p>Ask your agent to create a diagram or UX sketch, then open its review link.</p></div>
+  </main>
+  <main id="review" hidden>
+    <div class="review-heading"><div><h1 id="title"></h1><p id="description"></p></div><div class="version-controls"><span id="revision" class="pill"></span><select id="versions" aria-label="Diagram version"></select><button id="restore" hidden>Restore as new version</button></div></div>
+    <p id="history-notice" hidden>You’re viewing an earlier version. Return to the current version to add feedback, or restore this drawing.</p>
+    <div class="workspace">
+      <section class="drawing-panel" aria-label="Diagram canvas">
+        <div class="canvas-toolbar"><span id="kind-label"></span><div class="canvas-actions"><button id="move-view" aria-pressed="true" title="Drag to move the diagram">Move view</button><button id="select-area" aria-pressed="false" title="Drag a rectangle to comment">Select area</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="fit">Fit</button><button id="refresh">Refresh</button></div></div>
+        <div id="canvas" data-tool="pan"><svg id="drawing" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Diagram elements"></svg></div>
+        <div id="canvas-hint" class="canvas-footer">Drag to move the diagram. Click an object to comment, or choose Select area.</div>
+      </section>
+      <aside class="feedback-panel" aria-label="Review comments">
+        <div class="feedback-heading"><h2>Conversation</h2><span id="open-count" class="pill"></span></div>
+        <div id="selection"></div>
+        <form id="comment-form">
+          <label for="author">Your name</label><input id="author" name="author" placeholder="Developer" value="Developer" maxlength="80" required>
+          <label for="body">Feedback</label><textarea id="body" name="body" placeholder="What should change? What needs explaining?" maxlength="10000" rows="3" required></textarea>
+          <button class="primary" type="submit">Leave comment ↗</button>
+        </form>
+        <label class="filter"><input id="show-resolved" type="checkbox"> Include resolved</label>
+        <div id="comments"></div>
+      </aside>
+    </div>
+  </main>
+  <div id="error" role="alert" hidden></div>
+  <div id="status" role="status" class="sr-only"></div>
+</body>
+</html>
